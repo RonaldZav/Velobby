@@ -1,0 +1,26 @@
+lobbies:
+  - lobby1
+  - lobby2
+
+connection-mode: random # random, balance, order
+
+# List of servers where the /velobby command cannot be used.
+# Supports wildcards (e.g., auth*)
+blocked-servers:
+  - auth*
+  - login
+
+# Check for updates on startup and notify admins
+check-updates: true
+
+# Enable auto-reconnect (fallback) when kicked from a server
+auto-reconnect: true
+
+# Aliases for the /velobby command
+aliases:
+  - lobby
+  - hub
+
+# Language file to use (without extension)
+# Available: en, es
+language: en

@@ -1,0 +1,30 @@
+usage: |
+  <gradient:#00AAFF:#00FFAA><bold>Ayuda de Velobby</bold></gradient>
+  <gray>Comandos disponibles:</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby add</yellow> <gray>- Añadir servidor actual como lobby</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby remove</yellow> <gray>- Eliminar servidor actual de lobbies</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby status</yellow> <gray>- Ver estado de lobbies</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby send <jugador|ALL></yellow> <gray>- Enviar jugador(es) al lobby</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby reload</yellow> <gray>- Recargar configuración</gray>
+server_added: "<green>Servidor <yellow>%s</yellow> añadido a los lobbies.</green>"
+server_removed: "<green>Servidor <yellow>%s</yellow> eliminado de los lobbies.</green>"
+not_connected: "<red>No estás conectado a un servidor.</red>"
+only_players: "<red>Solo los jugadores pueden usar este comando.</red>"
+lobby_status: "<gold>Estado de Lobbies:</gold>"
+lobby_online: "<dark_gray>»</dark_gray> <yellow>%s</yellow>: <green>%d jugadores</green>"
+lobby_offline: "<dark_gray>»</dark_gray> <yellow>%s</yellow>: <red>Desconectado</red>"
+sent_all: "<green>Enviados todos los jugadores al lobby.</green>"
+sent_player: "<green>Enviado <yellow>%s</yellow> al lobby.</green>"
+player_not_found: "<red>Jugador no encontrado.</red>"
+unknown_command: "<red>Comando desconocido. Escribe /velobby para ayuda.</red>"
+no_lobbies: "<red>No hay lobbies disponibles.</red>"
+no_suitable_lobby: "<red>No se pudo encontrar un lobby adecuado.</red>"
+command_blocked: "<red>No puedes usar este comando en este servidor.</red>"
+reload_success: "<green>Archivos de configuración y lenguaje recargados.</green>"
+already_in_lobby: "<red>Ya estás en un lobby.</red>"
+
+# Titles
+lobby_connect_title: "<gradient:#FFD700:#FFA500>Bienvenido al Lobby</gradient>"
+lobby_connect_subtitle: "<yellow>¡Disfruta tu estancia!</yellow>"
+lobby_reconnect_title: "<red>Reconectado</red>"
+lobby_reconnect_subtitle: "<yellow>Has sido enviado de vuelta al lobby.</yellow>"

@@ -1,0 +1,30 @@
+usage: |
+  <gradient:#00AAFF:#00FFAA><bold>Velobby Help</bold></gradient>
+  <gray>Available commands:</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby add</yellow> <gray>- Add current server as lobby</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby remove</yellow> <gray>- Remove current server from lobbies</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby status</yellow> <gray>- Show lobby status</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby send <player|ALL></yellow> <gray>- Send player(s) to lobby</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby reload</yellow> <gray>- Reload configuration</gray>
+server_added: "<green>Server <yellow>%s</yellow> added to lobbies.</green>"
+server_removed: "<green>Server <yellow>%s</yellow> removed from lobbies.</green>"
+not_connected: "<red>You are not connected to a server.</red>"
+only_players: "<red>Only players can use this command.</red>"
+lobby_status: "<gold>Lobby Status:</gold>"
+lobby_online: "<dark_gray>»</dark_gray> <yellow>%s</yellow>: <green>%d players</green>"
+lobby_offline: "<dark_gray>»</dark_gray> <yellow>%s</yellow>: <red>Offline</red>"
+sent_all: "<green>Sent all players to lobby.</green>"
+sent_player: "<green>Sent <yellow>%s</yellow> to lobby.</green>"
+player_not_found: "<red>Player not found.</red>"
+unknown_command: "<red>Unknown command. Type /velobby for help.</red>"
+no_lobbies: "<red>No lobbies available.</red>"
+no_suitable_lobby: "<red>Could not find a suitable lobby.</red>"
+command_blocked: "<red>You cannot use this command on this server.</red>"
+reload_success: "<green>Configuration and language files reloaded.</green>"
+already_in_lobby: "<red>You are already in a lobby.</red>"
+
+# Titles
+lobby_connect_title: "<gradient:#FFD700:#FFA500>Welcome to the Lobby</gradient>"
+lobby_connect_subtitle: "<yellow>Enjoy your stay!</yellow>"
+lobby_reconnect_title: "<red>Reconnected</red>"
+lobby_reconnect_subtitle: "<yellow>You were sent back to the lobby.</yellow>"
