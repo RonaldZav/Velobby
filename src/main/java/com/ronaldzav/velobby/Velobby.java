@@ -19,12 +19,13 @@ import net.kyori.adventure.title.Title;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.ArrayList;
 
 import java.nio.file.Path;
 
-@Plugin(id = "velobby", name = "Velobby", version = "26.2", authors = {"RonaldZav"})
+@Plugin(id = "velobby", name = "Velobby", version = "26.3", authors = {"RonaldZav"})
 public class Velobby {
 
     private final ProxyServer server;
@@ -67,7 +68,7 @@ public class Velobby {
         
         // Check for updates
         if (configManager.isCheckUpdates()) {
-            this.updateChecker = new UpdateChecker(this, "26.2");
+            this.updateChecker = new UpdateChecker(this, "26.3");
             this.updateChecker.check();
         }
 
@@ -82,7 +83,7 @@ public class Velobby {
         Player player = event.getPlayer();
         if (player.hasPermission("velobby.admin") && updateChecker != null && updateChecker.isUpdateAvailable()) {
             player.sendMessage(Component.text("A new version of Velobby is available: " + updateChecker.getLatestVersion(), NamedTextColor.RED));
-            player.sendMessage(Component.text("You are currently using version: 26.2", NamedTextColor.RED));
+            player.sendMessage(Component.text("You are currently using version: 26.3", NamedTextColor.RED));
             player.sendMessage(Component.text("Please update the plugin.", NamedTextColor.RED));
         }
     }
@@ -102,31 +103,54 @@ public class Velobby {
         RegisteredServer kickedFrom = event.getServer();
         String kickedFromName = kickedFrom.getServerInfo().getName();
         
-        List<String> lobbies = configManager.getLobbies();
-        
+        // Check for special lobbies first for reconnect
         RegisteredServer targetServer = null;
-        String mode = configManager.getConnectionMode();
+        Player player = event.getPlayer();
 
-        List<String> availableLobbies = new ArrayList<>();
-        for (String lobby : lobbies) {
-            if (!lobby.equals(kickedFromName)) {
-                availableLobbies.add(lobby);
+        if (configManager.isSpecialLobbiesDefaultEnabled()) {
+            Map<String, String> specialLobbies = configManager.getSpecialLobbies();
+            for (Map.Entry<String, String> entry : specialLobbies.entrySet()) {
+                String lobbyName = entry.getKey();
+                String permission = entry.getValue();
+                
+                if (lobbyName.equals("default")) continue; // Skip the default key
+                if (lobbyName.equals(kickedFromName)) continue; // Don't reconnect to same server
+
+                if (player.hasPermission(permission)) {
+                    Optional<RegisteredServer> server = this.server.getServer(lobbyName);
+                    if (server.isPresent()) {
+                        targetServer = server.get();
+                        break; // Found a special lobby
+                    }
+                }
             }
         }
-        
-        if (!availableLobbies.isEmpty()) {
-            if (mode.equalsIgnoreCase("random")) {
-                String randomLobby = availableLobbies.get(new Random().nextInt(availableLobbies.size()));
-                Optional<RegisteredServer> s = server.getServer(randomLobby);
-                if (s.isPresent()) {
-                    targetServer = s.get();
+
+        if (targetServer == null) {
+            List<String> lobbies = configManager.getLobbies();
+            String mode = configManager.getConnectionMode();
+
+            List<String> availableLobbies = new ArrayList<>();
+            for (String lobby : lobbies) {
+                if (!lobby.equals(kickedFromName)) {
+                    availableLobbies.add(lobby);
                 }
-            } else {
-                for (String lobbyName : availableLobbies) {
-                    Optional<RegisteredServer> s = server.getServer(lobbyName);
+            }
+            
+            if (!availableLobbies.isEmpty()) {
+                if (mode.equalsIgnoreCase("random")) {
+                    String randomLobby = availableLobbies.get(new Random().nextInt(availableLobbies.size()));
+                    Optional<RegisteredServer> s = server.getServer(randomLobby);
                     if (s.isPresent()) {
                         targetServer = s.get();
-                        break;
+                    }
+                } else {
+                    for (String lobbyName : availableLobbies) {
+                        Optional<RegisteredServer> s = server.getServer(lobbyName);
+                        if (s.isPresent()) {
+                            targetServer = s.get();
+                            break;
+                        }
                     }
                 }
             }

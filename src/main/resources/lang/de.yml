@@ -1,0 +1,30 @@
+usage: |
+  <gradient:#00AAFF:#00FFAA><bold>Velobby Hilfe</bold></gradient>
+  <gray>Verfügbare Befehle:</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby add</yellow> <gray>- Aktuellen Server als Lobby hinzufügen</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby remove</yellow> <gray>- Aktuellen Server von Lobbies entfernen</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby status</yellow> <gray>- Lobby-Status anzeigen</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby send <player|ALL></yellow> <gray>- Spieler zur Lobby senden</gray>
+  <dark_gray>»</dark_gray> <yellow>/velobby reload</yellow> <gray>- Konfiguration neu laden</gray>
+server_added: "<green>Server <yellow>%s</yellow> zu den Lobbies hinzugefügt.</green>"
+server_removed: "<green>Server <yellow>%s</yellow> aus den Lobbies entfernt.</green>"
+not_connected: "<red>Du bist mit keinem Server verbunden.</red>"
+only_players: "<red>Nur Spieler können diesen Befehl verwenden.</red>"
+lobby_status: "<gold>Lobby Status:</gold>"
+lobby_online: "<dark_gray>»</dark_gray> <yellow>%s</yellow>: <green>%d Spieler</green>"
+lobby_offline: "<dark_gray>»</dark_gray> <yellow>%s</yellow>: <red>Offline</red>"
+sent_all: "<green>Alle Spieler wurden zur Lobby gesendet.</green>"
+sent_player: "<green><yellow>%s</yellow> wurde zur Lobby gesendet.</green>"
+player_not_found: "<red>Spieler nicht gefunden.</red>"
+unknown_command: "<red>Unbekannter Befehl. Tippe /velobby für Hilfe.</red>"
+no_lobbies: "<red>Keine Lobbies verfügbar.</red>"
+no_suitable_lobby: "<red>Keine passende Lobby gefunden.</red>"
+command_blocked: "<red>Du kannst diesen Befehl auf diesem Server nicht verwenden.</red>"
+reload_success: "<green>Konfiguration und Sprachdateien neu geladen.</green>"
+already_in_lobby: "<red>Du bist bereits in einer Lobby.</red>"
+
+# Titles
+lobby_connect_title: "<gradient:#FFD700:#FFA500>Willkommen in der Lobby</gradient>"
+lobby_connect_subtitle: "<yellow>Genieße deinen Aufenthalt!</yellow>"
+lobby_reconnect_title: "<red>Neu verbunden</red>"
+lobby_reconnect_subtitle: "<yellow>Du wurdest zurück zur Lobby gesendet.</yellow>"

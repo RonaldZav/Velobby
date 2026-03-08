@@ -1,6 +1,12 @@
+# VELOBBY 26.3
+
 lobbies:
   - lobby1
   - lobby2
+
+special_lobbies:
+  default: true # Enable the automatic connection to special_lobbies if the player has permissions.
+  lobby2: velobby.use.premium # Requires that permission to connect.
 
 connection-mode: random # random, balance, order
 
@@ -22,5 +28,5 @@ aliases:
   - hub
 
 # Language file to use (without extension)
-# Available: en, es
+# Available: en, es, de
 language: en

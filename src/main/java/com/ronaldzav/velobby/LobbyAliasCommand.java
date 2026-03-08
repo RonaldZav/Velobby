@@ -8,6 +8,7 @@ import net.kyori.adventure.title.Title;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -49,6 +50,29 @@ public class LobbyAliasCommand implements SimpleCommand {
     }
 
     private void sendPlayerToLobby(Player player) {
+        // Check for special lobbies first
+        if (plugin.getConfigManager().isSpecialLobbiesDefaultEnabled()) {
+            Map<String, String> specialLobbies = plugin.getConfigManager().getSpecialLobbies();
+            for (Map.Entry<String, String> entry : specialLobbies.entrySet()) {
+                String lobbyName = entry.getKey();
+                String permission = entry.getValue();
+                
+                if (lobbyName.equals("default")) continue; // Skip the default key
+
+                if (player.hasPermission(permission)) {
+                    Optional<RegisteredServer> server = plugin.getServer().getServer(lobbyName);
+                    if (server.isPresent()) {
+                        player.createConnectionRequest(server.get()).connect().thenAccept(result -> {
+                            if (result.isSuccessful()) {
+                                sendTitle(player);
+                            }
+                        });
+                        return; // Found a special lobby, stop here
+                    }
+                }
+            }
+        }
+
         List<String> lobbies = plugin.getConfigManager().getLobbies();
         if (lobbies.isEmpty()) {
             player.sendMessage(plugin.getLangManager().getMessage("no_lobbies"));
@@ -89,19 +113,23 @@ public class LobbyAliasCommand implements SimpleCommand {
         if (targetServer != null) {
             player.createConnectionRequest(targetServer).connect().thenAccept(result -> {
                 if (result.isSuccessful()) {
-                    Component titleText = plugin.getLangManager().getMessage("lobby_connect_title");
-                    Component subtitleText = plugin.getLangManager().getMessage("lobby_connect_subtitle");
-                    
-                    Title title = Title.title(
-                        titleText,
-                        subtitleText,
-                        Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(3000), Duration.ofMillis(1000))
-                    );
-                    player.showTitle(title);
+                    sendTitle(player);
                 }
             });
         } else {
             player.sendMessage(plugin.getLangManager().getMessage("no_suitable_lobby"));
         }
+    }
+
+    private void sendTitle(Player player) {
+        Component titleText = plugin.getLangManager().getMessage("lobby_connect_title");
+        Component subtitleText = plugin.getLangManager().getMessage("lobby_connect_subtitle");
+        
+        Title title = Title.title(
+            titleText,
+            subtitleText,
+            Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(3000), Duration.ofMillis(1000))
+        );
+        player.showTitle(title);
     }
 }

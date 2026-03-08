@@ -13,6 +13,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.regex.Pattern;
+import java.util.HashMap;
 
 public class ConfigManager {
 
@@ -148,5 +149,36 @@ public class ConfigManager {
 
     public synchronized String getLanguage() {
         return (String) config.getOrDefault("language", "en");
+    }
+
+    public synchronized Map<String, String> getSpecialLobbies() {
+        if (config.containsKey("special_lobbies")) {
+            Object specialObj = config.get("special_lobbies");
+            if (specialObj instanceof Map) {
+                Map<String, Object> rawMap = (Map<String, Object>) specialObj;
+                Map<String, String> specialLobbies = new HashMap<>();
+                for (Map.Entry<String, Object> entry : rawMap.entrySet()) {
+                    if (entry.getValue() instanceof String) {
+                        specialLobbies.put(entry.getKey(), (String) entry.getValue());
+                    }
+                }
+                return specialLobbies;
+            }
+        }
+        return new HashMap<>();
+    }
+
+    public synchronized boolean isSpecialLobbiesDefaultEnabled() {
+        if (config.containsKey("special_lobbies")) {
+            Object specialObj = config.get("special_lobbies");
+            if (specialObj instanceof Map) {
+                Map<String, Object> rawMap = (Map<String, Object>) specialObj;
+                Object defaultVal = rawMap.get("default");
+                if (defaultVal instanceof Boolean) {
+                    return (Boolean) defaultVal;
+                }
+            }
+        }
+        return false;
     }
 }

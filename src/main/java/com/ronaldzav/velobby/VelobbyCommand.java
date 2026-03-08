@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -51,11 +52,6 @@ public class VelobbyCommand implements SimpleCommand {
                     if (server.isPresent()) {
                         String serverName = server.get().getServerInfo().getName();
                         plugin.getConfigManager().addLobby(serverName);
-                        // Formatting with MiniMessage is tricky if we want to inject variables into the string before parsing.
-                        // A simple way is to use String.format on the raw string, then parse.
-                        // But if the variable contains tags, it might break.
-                        // For now, let's assume server names are safe or we just replace %s.
-                        String rawMsg = plugin.getLangManager().getRawMessage("server_added").replace("%s", serverName);
                         source.sendMessage(plugin.getLangManager().getMessage("server_added").replaceText(b -> b.matchLiteral("%s").replacement(serverName)));
                     } else {
                         source.sendMessage(plugin.getLangManager().getMessage("not_connected"));
@@ -144,6 +140,25 @@ public class VelobbyCommand implements SimpleCommand {
     }
 
     private void sendPlayerToLobby(Player player) {
+        // Check for special lobbies first
+        if (plugin.getConfigManager().isSpecialLobbiesDefaultEnabled()) {
+            Map<String, String> specialLobbies = plugin.getConfigManager().getSpecialLobbies();
+            for (Map.Entry<String, String> entry : specialLobbies.entrySet()) {
+                String lobbyName = entry.getKey();
+                String permission = entry.getValue();
+                
+                if (lobbyName.equals("default")) continue; // Skip the default key
+
+                if (player.hasPermission(permission)) {
+                    Optional<RegisteredServer> server = plugin.getServer().getServer(lobbyName);
+                    if (server.isPresent()) {
+                        player.createConnectionRequest(server.get()).connect();
+                        return; // Found a special lobby, stop here
+                    }
+                }
+            }
+        }
+
         List<String> lobbies = plugin.getConfigManager().getLobbies();
         if (lobbies.isEmpty()) {
             player.sendMessage(plugin.getLangManager().getMessage("no_lobbies"));
@@ -179,12 +194,6 @@ public class VelobbyCommand implements SimpleCommand {
                 player.sendMessage(plugin.getLangManager().getMessage("no_suitable_lobby"));
             }
         } else if (mode.equalsIgnoreCase("order")) {
-            // Fill first available lobby
-            // Since we can't easily check max players without pinging, we'll iterate and ping.
-            // However, pinging is async. For simplicity in this synchronous command execution,
-            // we will just connect to the first one that is online.
-            // A more robust solution would involve async pinging.
-            
             RegisteredServer targetServer = null;
              for (String lobbyName : lobbies) {
                 Optional<RegisteredServer> server = plugin.getServer().getServer(lobbyName);
